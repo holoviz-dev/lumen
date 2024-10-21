@@ -1,0 +1,1086 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+            <link rel="manifest" href="../site.webmanifest"/>
+            
+    <title>Building a data pipeline &#8212; Lumen 1.5.3b1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/runbutton.css?v=880c2f88" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=aacd715d" />
+    <link rel="stylesheet" type="text/css" href="../_static/dataframe.css?v=302d74fa" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/datatabulator/tabulator-tables@6.3.0/dist/css/tabulator_simple.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/pyscript.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/divider.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/floatpanel.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/chat_interface.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/chat_feed.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/katex.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/debugger.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/swipe.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/widgetbox.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/alerts.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/gridbox.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/chat_steps.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/widgets.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/chat_step.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/listpanel.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/gridspec.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/icon.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/regular_table.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/markdown.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/progress.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/booleanstatus.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/chat_message.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/json.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/select.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/editable_slider.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/loading.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/chat_copy_icon.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/button.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/player.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/gridstack.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/layout.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/loadingspinner.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/chat_reaction_icons.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/notifications.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/dataframe.css" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=25fd80cb"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/run_cell.js?v=da6c9fe8"></script>
+    <script src="../_static/WorkerHandler.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/ServiceHandler.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.6.0.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.6.0.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.6.0.min.js"></script>
+    <script src="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/panel.min.js"></script>
+    <script src="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/reactiveesm/es-module-shims@^1.10.0/dist/es-module-shims.min.js"></script>
+    <script src="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/reactiveesm/es-module-shims@^1.10.0/dist/es-module-shims.min.js"></script>
+    <script src="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/reactiveesm/es-module-shims@^1.10.0/dist/es-module-shims.min.js"></script>
+    <script src="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/datatabulator/tabulator-tables@6.3.0/dist/js/tabulator.min.js"></script>
+    <script src="https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/datatabulator/luxon/build/global/luxon.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/pipelines';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to Guides" href="../how_to/index.html" />
+    <link rel="prev" title="Core Concepts" href="core_concepts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo_horizontal.png" class="logo__image only-light" alt="Lumen 1.5.3b1 documentation - Home"/>
+    <script>document.write(`<img src="../_static/logo_horizontal.png" class="logo__image only-dark" alt="Lumen 1.5.3b1 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how_to/index.html">
+    How to
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../background/index.html">
+    Background
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/holoviz/lumen" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discourse.holoviz.org/c/lumen/14" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how_to/index.html">
+    How to
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../gallery/index.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../background/index.html">
+    Background
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/holoviz/lumen" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discourse.holoviz.org/c/lumen/14" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-desktop-download sd-mr-1" height="2.0em" version="1.1" viewbox="0 0 24 24" width="2.0em"><path d="M11.25 9.331V.75a.75.75 0 0 1 1.5 0v8.58l1.949-2.11A.75.75 0 1 1 15.8 8.237l-3.25 3.52a.75.75 0 0 1-1.102 0l-3.25-3.52A.75.75 0 1 1 9.3 7.22l1.949 2.111Z"></path><path d="M2.5 3.75v11.5c0 .138.112.25.25.25h18.5a.25.25 0 0 0 .25-.25V3.75a.25.25 0 0 0-.25-.25h-5.5a.75.75 0 0 1 0-1.5h5.5c.966 0 1.75.784 1.75 1.75v11.5A1.75 1.75 0 0 1 21.25 17h-6.204c.171 1.375.805 2.652 1.769 3.757A.752.752 0 0 1 16.25 22h-8.5a.75.75 0 0 1-.566-1.243c.965-1.105 1.599-2.382 1.77-3.757H2.75A1.75 1.75 0 0 1 1 15.25V3.75C1 2.784 1.784 2 2.75 2h5.5a.75.75 0 0 1 0 1.5h-5.5a.25.25 0 0 0-.25.25ZM10.463 17c-.126 1.266-.564 2.445-1.223 3.5h5.52c-.66-1.055-1.098-2.234-1.223-3.5Z"></path></svg> Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_dashboard.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-tools sd-mr-1" height="2.0em" version="1.1" viewbox="0 0 24 24" width="2.0em"><path d="M7.875 2.292a.114.114 0 0 0-.032.018A7.239 7.239 0 0 0 4.75 8.25a7.248 7.248 0 0 0 3.654 6.297c.57.327.982.955.941 1.682v.002l-.317 6.058a.75.75 0 1 1-1.498-.078l.317-6.062v-.004c.006-.09-.047-.215-.188-.296A8.749 8.749 0 0 1 3.25 8.25a8.738 8.738 0 0 1 3.732-7.169 1.547 1.547 0 0 1 1.709-.064c.484.292.809.835.809 1.46v4.714a.25.25 0 0 0 .119.213l2.25 1.385c.08.05.182.05.262 0l2.25-1.385a.25.25 0 0 0 .119-.213V2.478c0-.626.325-1.169.81-1.461a1.547 1.547 0 0 1 1.708.064 8.741 8.741 0 0 1 3.732 7.17 8.747 8.747 0 0 1-4.41 7.598c-.14.081-.193.206-.188.296v.004l.318 6.062a.75.75 0 1 1-1.498.078l-.317-6.058v-.002c-.041-.727.37-1.355.94-1.682A7.247 7.247 0 0 0 19.25 8.25a7.239 7.239 0 0 0-3.093-5.94.114.114 0 0 0-.032-.018l-.01-.001c-.003 0-.014 0-.031.01-.036.022-.084.079-.084.177V7.19c0 .608-.315 1.172-.833 1.49l-2.25 1.385a1.75 1.75 0 0 1-1.834 0l-2.25-1.384A1.752 1.752 0 0 1 8 7.192V2.477c0-.098-.048-.155-.084-.176a.068.068 0 0 0-.031-.011l-.01.001Z"></path></svg> Build a dashboard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-mortar-board sd-mr-1" height="2.0em" version="1.1" viewbox="0 0 24 24" width="2.0em"><path d="M12.292 2.06v-.001l11.25 4.75a.749.749 0 0 1 0 1.382L19 10.108V15a.75.75 0 0 1-.11.391h-.001a2.84 2.84 0 0 1-.392.482c-.249.256-.625.58-1.163.896-1.08.638-2.776 1.23-5.334 1.23-.673 0-1.286-.041-1.846-.113a.75.75 0 0 1 .192-1.487c.492.063 1.042.1 1.654.1 2.317 0 3.746-.533 4.572-1.021.31-.178.596-.397.849-.65l.079-.085V10.74l-5.208 2.2a.75.75 0 0 1-.584 0L5.75 10.424v3.17c.502.129.96.391 1.327.758.579.578.923 1.41.923 2.428v4.5a.761.761 0 0 1-.345.634 2.157 2.157 0 0 1-.21.117 3.923 3.923 0 0 1-.52.213A6.121 6.121 0 0 1 5 22.532a6.092 6.092 0 0 1-1.925-.288 4.065 4.065 0 0 1-.52-.213 1.816 1.816 0 0 1-.22-.124.757.757 0 0 1-.335-.624v-4.5c0-1.02.344-1.85.923-2.43a2.904 2.904 0 0 1 1.327-.757V9.793L.458 8.19a.75.75 0 0 1 0-1.38l11.25-4.75a.75.75 0 0 1 .584 0ZM12 11.436 21.322 7.5 12 3.564 2.678 7.5ZM5 15c-.377 0-.745.141-1.017.413-.265.265-.483.7-.483 1.368v4.022c.299.105.797.228 1.5.228s1.201-.123 1.5-.228V16.78c0-.669-.218-1.103-.483-1.368A1.433 1.433 0 0 0 5 15Z"></path></svg> Core Concepts</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><svg aria-hidden="true" class="sd-octicon sd-octicon-git-commit sd-mr-1" height="2.0em" version="1.1" viewbox="0 0 24 24" width="2.0em"><path d="M16.944 11h4.306a.75.75 0 0 1 0 1.5h-4.306a5.001 5.001 0 0 1-9.888 0H2.75a.75.75 0 0 1 0-1.5h4.306a5.001 5.001 0 0 1 9.888 0Zm-1.444.75a3.5 3.5 0 1 0-7 0 3.5 3.5 0 0 0 7 0Z"></path></svg> Building a data pipeline</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Getting Started</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><svg...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="building-a-data-pipeline">
+<h1><svg version="1.1" width="2.0em" height="2.0em" class="sd-octicon sd-octicon-git-commit sd-mr-1" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.944 11h4.306a.75.75 0 0 1 0 1.5h-4.306a5.001 5.001 0 0 1-9.888 0H2.75a.75.75 0 0 1 0-1.5h4.306a5.001 5.001 0 0 1 9.888 0Zm-1.444.75a3.5 3.5 0 1 0-7 0 3.5 3.5 0 0 0 7 0Z"></path></svg> Building a data pipeline<a class="headerlink" href="#building-a-data-pipeline" title="Link to this heading">#</a></h1>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lumen</span>
+<span class="kn">import</span> <span class="nn">panel</span> <span class="k">as</span> <span class="nn">pn</span>
+
+<span class="n">pn</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;tabulator&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell0-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell0-py" class="pyodide-stderr" ></pre><p>Lumen dashboards are a powerful, declarative way to write data-driven applications and dashboards. However Lumen components also provide a powerful abstraction that can be leveraged independently of a full dashboard YAML specification. Specifically the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> component offers an extremely powerful basis for building data transformations that can either be used to power analysis pipelines or to drive visual components we can render in a notebook or a custom Panel dashboard. In this section we will discover how to leverage pipelines in this way.</p>
+<p>First however we need to understand how Pipelines work, specifically the order in which operations are applied. In particular we need to distinguish between operations that are applied by the <code class="docutils literal notranslate"><span class="pre">Source</span></code> and operations that are applied to <strong>data</strong> returned by the <code class="docutils literal notranslate"><span class="pre">Source</span></code>. This is because various <code class="docutils literal notranslate"><span class="pre">Source</span></code> types support data queries and in the case of SQL based <code class="docutils literal notranslate"><span class="pre">Source</span></code> may also support arbitrary SQL transforms. This means that the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> will first call the <code class="docutils literal notranslate"><span class="pre">Source.get</span></code> method with state of the <code class="docutils literal notranslate"><span class="pre">Filter</span></code> and <code class="docutils literal notranslate"><span class="pre">SQLTransform</span></code> components allowing the <code class="docutils literal notranslate"><span class="pre">Source</span></code> to optimize the filter queries and transforms and return the data, once the data is returned as a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> the declared <code class="docutils literal notranslate"><span class="pre">Transform</span></code> stages will be applied in sequence.</p>
+<p><img alt="Pipeline Diagram" src="../_images/pipeline_diagram.png" /></p>
+<section id="declaring-a-pipeline">
+<h2>Declaring a pipeline<a class="headerlink" href="#declaring-a-pipeline" title="Link to this heading">#</a></h2>
+<p>Just like any other component in Lumen <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> components can be built using a declarative specification. Let us for example build a <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> that starts with a <code class="docutils literal notranslate"><span class="pre">FileSource</span></code> and applies a number of filters and transforms.</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lumen.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="n">data_url</span> <span class="o">=</span> <span class="s1">&#39;https://datasets.holoviz.org/penguins/v1/penguins.csv&#39;</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="o">.</span><span class="n">from_spec</span><span class="p">({</span>
+    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;file&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tables&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;penguins&#39;</span><span class="p">:</span> <span class="n">data_url</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;filters&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="s1">&#39;species&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="s1">&#39;island&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="s1">&#39;sex&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="s1">&#39;year&#39;</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;transforms&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;aggregate&#39;</span><span class="p">,</span> <span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;by&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">]}</span>
+    <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell1-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell1-py" class="pyodide-stderr" ></pre><p>Once declared we can inspect the current <code class="docutils literal notranslate"><span class="pre">data</span></code> easily:</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell2-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell2-py" class="pyodide-stderr" ></pre><div id="output-codecell2-py" class="pyodide-output embedded"><div class="pyodide-output-wrapper"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+    <tr>
+      <th>species</th>
+      <th>sex</th>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="6" valign="top">Adelie</th>
+      <th rowspan="3" valign="top">female</th>
+      <th>2007</th>
+      <td>37.922727</td>
+      <td>18.127273</td>
+      <td>185.227273</td>
+      <td>3389.772727</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>36.516000</td>
+      <td>17.460000</td>
+      <td>188.440000</td>
+      <td>3386.000000</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>37.407692</td>
+      <td>17.350000</td>
+      <td>189.346154</td>
+      <td>3334.615385</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">male</th>
+      <th>2007</th>
+      <td>39.950000</td>
+      <td>19.509091</td>
+      <td>188.181818</td>
+      <td>4038.636364</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>40.604000</td>
+      <td>18.924000</td>
+      <td>193.640000</td>
+      <td>4098.000000</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>40.557692</td>
+      <td>18.846154</td>
+      <td>194.807692</td>
+      <td>3995.192308</td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">Chinstrap</th>
+      <th rowspan="3" valign="top">female</th>
+      <th>2007</th>
+      <td>46.569231</td>
+      <td>17.838462</td>
+      <td>188.692308</td>
+      <td>3569.230769</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>46.000000</td>
+      <td>17.300000</td>
+      <td>192.666667</td>
+      <td>3472.222222</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>47.008333</td>
+      <td>17.533333</td>
+      <td>194.333333</td>
+      <td>3522.916667</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">male</th>
+      <th>2007</th>
+      <td>50.876923</td>
+      <td>19.130769</td>
+      <td>196.153846</td>
+      <td>3819.230769</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>51.400000</td>
+      <td>19.600000</td>
+      <td>202.777778</td>
+      <td>4127.777778</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>51.100000</td>
+      <td>19.125000</td>
+      <td>201.833333</td>
+      <td>3927.083333</td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">Gentoo</th>
+      <th rowspan="3" valign="top">female</th>
+      <th>2007</th>
+      <td>45.062500</td>
+      <td>13.993750</td>
+      <td>211.062500</td>
+      <td>4618.750000</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>45.295455</td>
+      <td>14.131818</td>
+      <td>213.000000</td>
+      <td>4627.272727</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>46.260000</td>
+      <td>14.550000</td>
+      <td>213.700000</td>
+      <td>4786.250000</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">male</th>
+      <th>2007</th>
+      <td>49.000000</td>
+      <td>15.364706</td>
+      <td>218.882353</td>
+      <td>5552.941176</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>48.539130</td>
+      <td>15.704348</td>
+      <td>222.086957</td>
+      <td>5410.869565</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>50.880952</td>
+      <td>16.019048</td>
+      <td>223.095238</td>
+      <td>5510.714286</td>
+    </tr>
+  </tbody>
+</table></div></div>
+<p>Note that a <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> updates dynamically if any <code class="docutils literal notranslate"><span class="pre">Source</span></code>, <code class="docutils literal notranslate"><span class="pre">Filter</span></code> or <code class="docutils literal notranslate"><span class="pre">Transform</span></code> is changed or updated. In the pipeline above we declared ‘widget’ filters which we can render by accessing the <code class="docutils literal notranslate"><span class="pre">control_panel</span></code> property. To view the dynamically updating data can instantiate a <code class="docutils literal notranslate"><span class="pre">lumen.views.Table</span></code> component. In a live notebook we will now get an interactive application letting us dynamically filter the data and view the result.</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lumen.views</span> <span class="kn">import</span> <span class="n">Table</span>
+
+<span class="n">pn</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">control_panel</span><span class="p">,</span> <span class="n">Table</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">pagination</span><span class="o">=</span><span class="s1">&#39;remote&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell3-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell3-py" class="pyodide-stderr" style="display: block;">Matplotlib is building the font cache; this may take a moment.
+</pre><div id="output-codecell3-py" class="pyodide-output embedded"></div>
+
+            <script>
+              async function embed_bokeh_3 () {
+                if (window.Bokeh && window.Bokeh.Panel && window.Tabulator) {
+                  await Bokeh.embed.embed_item({"target_id": "output-codecell3-py", "root_id": "p1002", "doc": {"version": "3.6.0", "title": "Panel Application", "roots": [{"type": "object", "name": "Row", "id": "p1002", "attributes": {"name": "Row00380", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"type": "object", "name": "ImportedStyleSheet", "id": "p1006", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/loading.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1021", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/listpanel.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1004", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/default.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1005", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/native.css"}}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.layout.Column", "id": "p1003", "attributes": {"name": "Column00371", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"id": "p1021"}, {"id": "p1004"}, {"id": "p1005"}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.markup.HTML", "id": "p1008", "attributes": {"css_classes": ["markdown"], "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1007", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/markdown.css"}}, {"id": "p1004"}, {"id": "p1005"}], "margin": [5, 10], "align": "start", "text": "&lt;div style=&quot;font-size: 1.5em; font-weight: bold;&quot;&gt;Filters&lt;/div&gt;"}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1011", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1010", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/select.css"}}, {"id": "p1004"}, {"id": "p1005"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Species", "options": ["Adelie", "Chinstrap", "Gentoo"]}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1014", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"id": "p1010"}, {"id": "p1004"}, {"id": "p1005"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Island", "options": ["Biscoe", "Dream", "Torgersen"]}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1017", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"id": "p1010"}, {"id": "p1004"}, {"id": "p1005"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Sex", "options": ["male", "female", "nan"]}}, {"type": "object", "name": "RangeSlider", "id": "p1019", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"id": "p1004"}, {"id": "p1005"}], "margin": [5, 10], "align": "start", "title": "Year", "value": [2007, 2009], "start": 2007, "end": 2009}}]}}, {"type": "object", "name": "panel.models.layout.Column", "id": "p1022", "attributes": {"name": "Column00385", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"id": "p1021"}, {"id": "p1004"}, {"id": "p1005"}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.tabulator.DataTabulator", "id": "p1067", "attributes": {"subscribed_events": {"type": "set", "entries": ["selection-change", "cell-click", "table-edit"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1006"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1025", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/font-awesome/css/all.min.css"}}, {"id": "p1004"}, {"id": "p1005"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1023", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/datatabulator/tabulator-tables@6.3.0/dist/css/tabulator_simple.min.css"}}], "margin": [5, 10], "align": "start", "configuration": {"type": "map", "entries": [["selectable", true], ["columns", [{"type": "map", "entries": [["field", "species"]]}, {"type": "map", "entries": [["field", "sex"]]}, {"type": "map", "entries": [["field", "year"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "bill_length_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "bill_depth_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "flipper_length_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "body_mass_g"], ["sorter", "number"]]}]], ["dataTree", false]]}, "columns": [{"type": "object", "name": "TableColumn", "id": "p1029", "attributes": {"field": "species", "title": "species", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1028", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "CellEditor", "id": "p1027"}}}, {"type": "object", "name": "TableColumn", "id": "p1035", "attributes": {"field": "sex", "title": "sex", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1034", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "CellEditor", "id": "p1033"}}}, {"type": "object", "name": "TableColumn", "id": "p1041", "attributes": {"field": "year", "title": "year", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1040", "attributes": {"text_align": {"type": "value", "value": "left"}}}, "editor": {"type": "object", "name": "CellEditor", "id": "p1039"}}}, {"type": "object", "name": "TableColumn", "id": "p1046", "attributes": {"field": "bill_length_mm", "title": "bill_length_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1045", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1044"}}}, {"type": "object", "name": "TableColumn", "id": "p1051", "attributes": {"field": "bill_depth_mm", "title": "bill_depth_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1050", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1049"}}}, {"type": "object", "name": "TableColumn", "id": "p1056", "attributes": {"field": "flipper_length_mm", "title": "flipper_length_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1055", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1054"}}}, {"type": "object", "name": "TableColumn", "id": "p1061", "attributes": {"field": "body_mass_g", "title": "body_mass_g", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1060", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1059"}}}], "editable": false, "indexes": ["species", "sex", "year"], "layout": "fit_data_table", "source": {"type": "object", "name": "ColumnDataSource", "id": "p1064", "attributes": {"selected": {"type": "object", "name": "Selection", "id": "p1065", "attributes": {"indices": [], "line_indices": []}}, "selection_policy": {"type": "object", "name": "UnionRenderers", "id": "p1066"}, "data": {"type": "map", "entries": [["index", {"type": "ndarray", "array": {"type": "bytes", "data": "AAAAAAEAAAACAAAAAwAAAAQAAAAFAAAABgAAAAcAAAAIAAAACQAAAAoAAAALAAAADAAAAA0AAAAOAAAADwAAABAAAAARAAAA"}, "shape": [18], "dtype": "int32", "order": "little"}], ["species", {"type": "ndarray", "array": ["Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Chinstrap", "Chinstrap", "Chinstrap", "Chinstrap", "Chinstrap", "Chinstrap", "Gentoo", "Gentoo", "Gentoo", "Gentoo", "Gentoo", "Gentoo"], "shape": [18], "dtype": "object", "order": "little"}], ["sex", {"type": "ndarray", "array": ["female", "female", "female", "male", "male", "male", "female", "female", "female", "male", "male", "male", "female", "female", "female", "male", "male", "male"], "shape": [18], "dtype": "object", "order": "little"}], ["year", {"type": "ndarray", "array": {"type": "bytes", "data": "1wcAANgHAADZBwAA1wcAANgHAADZBwAA1wcAANgHAADZBwAA1wcAANgHAADZBwAA1wcAANgHAADZBwAA1wcAANgHAADZBwAA"}, "shape": [18], "dtype": "int32", "order": "little"}], ["bill_length_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "1r5h7Rv2QkA1XrpJDEJCQEMv9EIvtEJAmZmZmZn5Q0BaZDvfT01EQHZiJ3ZiR0RAjtzIjdxIR0AAAAAAAABHQBERERERgUdABD/wAz9wSUA0MzMzM7NJQM3MzMzMjElAAAAAAACIRkBGF1100aVGQOJ6FK5HIUdAAAAAAACASEC11eA5AkVIQAzDMAzDcElA"}, "shape": [18], "dtype": "float64", "order": "little"}], ["bill_depth_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "IU8J8pQgMkD2KFyPwnUxQJqZmZmZWTFAgjwlyFOCM0AGgZVDi+wyQIqd2Imd2DJAaqVWaqXWMUDMzMzMzEwxQImIiIiIiDFAF3qhF3ohM0CamZmZmZkzQAAAAAAAIDNAzczMzMz8K0DD2jesfUMsQJqZmZmZGS1Aurq6urq6LkC2GjxHoGgvQE7gBE7gBDBA"}, "shape": [18], "dtype": "float64", "order": "little"}], ["flipper_length_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "F1100UUnZ0CuR+F6FI5nQLETO7ETq2dARhdddNGFZ0AUrkfhejRoQJ7YiZ3YWWhAYid2YieWZ0BVVVVVVRVoQKuqqqqqSmhAT+zETuyEaECO4ziO41hpQKuqqqqqOmlAAAAAAABiakAAAAAAAKBqQGZmZmZmtmpAPDw8PDxca0BkIQtZyMJrQDEMwzAM42tA"}, "shape": [18], "dtype": "float64", "order": "little"}], ["body_mass_g", {"type": "ndarray", "array": {"type": "bytes", "data": "L7rooot7qkAAAAAAAHSqQBQ7sRM7DapAF1100UWNr0AAAAAAAAKwQHZiJ3ZiNq9AJ3ZiJ3biq0DHcRzHcSCrQFVVVVXVhatAJ3ZiJ3bWrUAcx3Ecxx+wQKuqqqoqrq5AAAAAAMAKskAXXXTRRROyQAAAAABAsrJA8fDw8PCwtUBvetOb3iK1QNu2bdu2hrVA"}, "shape": [18], "dtype": "float64", "order": "little"}]]}}}, "cell_styles": {"type": "map", "entries": [["id", "c9586607a0474273b6e1c06b5f89d971"], ["data", {"type": "map"}]]}, "pagination": "remote", "page": 1, "page_size": 20, "max_page": 1, "select_mode": true, "selectable_rows": null}}]}}]}}, {"type": "object", "name": "panel.models.location.Location", "id": "p1072", "attributes": {"name": "location", "reload": false}}], "defs": [{"type": "model", "name": "ReactiveHTML1"}, {"type": "model", "name": "FlexBox1", "properties": [{"name": "align_content", "kind": "Any", "default": "flex-start"}, {"name": "align_items", "kind": "Any", "default": "flex-start"}, {"name": "flex_direction", "kind": "Any", "default": "row"}, {"name": "flex_wrap", "kind": "Any", "default": "wrap"}, {"name": "gap", "kind": "Any", "default": ""}, {"name": "justify_content", "kind": "Any", "default": "flex-start"}]}, {"type": "model", "name": "FloatPanel1", "properties": [{"name": "config", "kind": "Any", "default": {"type": "map"}}, {"name": "contained", "kind": "Any", "default": true}, {"name": "position", "kind": "Any", "default": "right-top"}, {"name": "offsetx", "kind": "Any", "default": null}, {"name": "offsety", "kind": "Any", "default": null}, {"name": "theme", "kind": "Any", "default": "primary"}, {"name": "status", "kind": "Any", "default": "normalized"}]}, {"type": "model", "name": "GridStack1", "properties": [{"name": "mode", "kind": "Any", "default": "warn"}, {"name": "ncols", "kind": "Any", "default": null}, {"name": "nrows", "kind": "Any", "default": null}, {"name": "allow_resize", "kind": "Any", "default": true}, {"name": "allow_drag", "kind": "Any", "default": true}, {"name": "state", "kind": "Any", "default": []}]}, {"type": "model", "name": "drag1", "properties": [{"name": "slider_width", "kind": "Any", "default": 5}, {"name": "slider_color", "kind": "Any", "default": "black"}, {"name": "value", "kind": "Any", "default": 50}]}, {"type": "model", "name": "click1", "properties": [{"name": "terminal_output", "kind": "Any", "default": ""}, {"name": "debug_name", "kind": "Any", "default": ""}, {"name": "clears", "kind": "Any", "default": 0}]}, {"type": "model", "name": "FastWrapper1", "properties": [{"name": "object", "kind": "Any", "default": null}, {"name": "style", "kind": "Any", "default": null}]}, {"type": "model", "name": "NotificationAreaBase1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}]}, {"type": "model", "name": "NotificationArea1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "notifications", "kind": "Any", "default": []}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}, {"name": "types", "kind": "Any", "default": [{"type": "map", "entries": [["type", "warning"], ["background", "#ffc107"], ["icon", {"type": "map", "entries": [["className", "fas fa-exclamation-triangle"], ["tagName", "i"], ["color", "white"]]}]]}, {"type": "map", "entries": [["type", "info"], ["background", "#007bff"], ["icon", {"type": "map", "entries": [["className", "fas fa-info-circle"], ["tagName", "i"], ["color", "white"]]}]]}]}]}, {"type": "model", "name": "Notification", "properties": [{"name": "background", "kind": "Any", "default": null}, {"name": "duration", "kind": "Any", "default": 3000}, {"name": "icon", "kind": "Any", "default": null}, {"name": "message", "kind": "Any", "default": ""}, {"name": "notification_type", "kind": "Any", "default": null}, {"name": "_destroyed", "kind": "Any", "default": false}]}, {"type": "model", "name": "TemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "BootstrapTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "TemplateEditor1", "properties": [{"name": "layout", "kind": "Any", "default": []}]}, {"type": "model", "name": "MaterialTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "ReactiveESM1"}, {"type": "model", "name": "JSComponent1"}, {"type": "model", "name": "ReactComponent1"}, {"type": "model", "name": "AnyWidgetComponent1"}, {"type": "model", "name": "request_value1", "properties": [{"name": "fill", "kind": "Any", "default": "none"}, {"name": "_synced", "kind": "Any", "default": null}, {"name": "_request_sync", "kind": "Any", "default": 0}]}, {"type": "model", "name": "DownloadButton1", "properties": [{"name": "color", "kind": "Any", "default": "grey"}, {"name": "data", "kind": "Any", "default": ""}, {"name": "filename", "kind": "Any", "default": ""}, {"name": "hide", "kind": "Any", "default": false}, {"name": "size", "kind": "Any", "default": 20}]}, {"type": "model", "name": "clicked1", "properties": [{"name": "disabled", "kind": "Any", "default": false}, {"name": "color", "kind": "Any", "default": null}, {"name": "icon", "kind": "Any", "default": null}, {"name": "size", "kind": "Any", "default": 12}]}]}, "version": "3.6.0"})
+                } else {
+                   setTimeout(embed_bokeh_3, 200)
+                }
+              };
+              embed_bokeh_3()
+            </script>
+            <p>Note that since a <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> is a Parameterized object we can pass the <code class="docutils literal notranslate"><span class="pre">data</span></code> parameter to a Panel component e.g. here we bind the data to a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> pane:</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pn</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">control_panel</span><span class="p">,</span>
+    <span class="n">pn</span><span class="o">.</span><span class="n">pane</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell4-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell4-py" class="pyodide-stderr" ></pre><div id="output-codecell4-py" class="pyodide-output embedded"></div>
+
+            <script>
+              async function embed_bokeh_4 () {
+                if (window.Bokeh && window.Bokeh.Panel && window.Tabulator) {
+                  await Bokeh.embed.embed_item({"target_id": "output-codecell4-py", "root_id": "p1079", "doc": {"version": "3.6.0", "title": "Panel Application", "roots": [{"type": "object", "name": "Row", "id": "p1079", "attributes": {"name": "Row00406", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"type": "object", "name": "ImportedStyleSheet", "id": "p1083", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/loading.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1098", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/listpanel.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1081", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/default.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1082", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/native.css"}}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.layout.Column", "id": "p1080", "attributes": {"name": "Column00397", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1083"}, {"id": "p1098"}, {"id": "p1081"}, {"id": "p1082"}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.markup.HTML", "id": "p1085", "attributes": {"css_classes": ["markdown"], "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1083"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1084", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/markdown.css"}}, {"id": "p1081"}, {"id": "p1082"}], "margin": [5, 10], "align": "start", "text": "&lt;div style=&quot;font-size: 1.5em; font-weight: bold;&quot;&gt;Filters&lt;/div&gt;"}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1088", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1083"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1087", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/select.css"}}, {"id": "p1081"}, {"id": "p1082"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Species", "options": ["Adelie", "Chinstrap", "Gentoo"]}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1091", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1083"}, {"id": "p1087"}, {"id": "p1081"}, {"id": "p1082"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Island", "options": ["Biscoe", "Dream", "Torgersen"]}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1094", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1083"}, {"id": "p1087"}, {"id": "p1081"}, {"id": "p1082"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Sex", "options": ["male", "female", "nan"]}}, {"type": "object", "name": "RangeSlider", "id": "p1096", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1083"}, {"id": "p1081"}, {"id": "p1082"}], "margin": [5, 10], "align": "start", "title": "Year", "value": [2007, 2009], "start": 2007, "end": 2009}}]}}, {"type": "object", "name": "panel.models.markup.HTML", "id": "p1101", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1083"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1100", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/dataframe.css"}}, {"id": "p1081"}, {"id": "p1082"}], "width": 800, "min_width": 800, "margin": [5, 10], "align": "start", "text": "&lt;table class=&quot;dataframe panel-df&quot;&gt;\n  &lt;thead&gt;\n    &lt;tr style=&quot;text-align: right;&quot;&gt;\n      &lt;th&gt;&lt;/th&gt;\n      &lt;th&gt;&lt;/th&gt;\n      &lt;th&gt;&lt;/th&gt;\n      &lt;th&gt;bill_length_mm&lt;/th&gt;\n      &lt;th&gt;bill_depth_mm&lt;/th&gt;\n      &lt;th&gt;flipper_length_mm&lt;/th&gt;\n      &lt;th&gt;body_mass_g&lt;/th&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;species&lt;/th&gt;\n      &lt;th&gt;sex&lt;/th&gt;\n      &lt;th&gt;year&lt;/th&gt;\n      &lt;th&gt;&lt;/th&gt;\n      &lt;th&gt;&lt;/th&gt;\n      &lt;th&gt;&lt;/th&gt;\n      &lt;th&gt;&lt;/th&gt;\n    &lt;/tr&gt;\n  &lt;/thead&gt;\n  &lt;tbody&gt;\n    &lt;tr&gt;\n      &lt;th rowspan=&quot;6&quot; valign=&quot;top&quot;&gt;Adelie&lt;/th&gt;\n      &lt;th rowspan=&quot;3&quot; valign=&quot;top&quot;&gt;female&lt;/th&gt;\n      &lt;th&gt;2007&lt;/th&gt;\n      &lt;td&gt;37.922727&lt;/td&gt;\n      &lt;td&gt;18.127273&lt;/td&gt;\n      &lt;td&gt;185.227273&lt;/td&gt;\n      &lt;td&gt;3389.772727&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2008&lt;/th&gt;\n      &lt;td&gt;36.516000&lt;/td&gt;\n      &lt;td&gt;17.460000&lt;/td&gt;\n      &lt;td&gt;188.440000&lt;/td&gt;\n      &lt;td&gt;3386.000000&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2009&lt;/th&gt;\n      &lt;td&gt;37.407692&lt;/td&gt;\n      &lt;td&gt;17.350000&lt;/td&gt;\n      &lt;td&gt;189.346154&lt;/td&gt;\n      &lt;td&gt;3334.615385&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th rowspan=&quot;3&quot; valign=&quot;top&quot;&gt;male&lt;/th&gt;\n      &lt;th&gt;2007&lt;/th&gt;\n      &lt;td&gt;39.950000&lt;/td&gt;\n      &lt;td&gt;19.509091&lt;/td&gt;\n      &lt;td&gt;188.181818&lt;/td&gt;\n      &lt;td&gt;4038.636364&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2008&lt;/th&gt;\n      &lt;td&gt;40.604000&lt;/td&gt;\n      &lt;td&gt;18.924000&lt;/td&gt;\n      &lt;td&gt;193.640000&lt;/td&gt;\n      &lt;td&gt;4098.000000&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2009&lt;/th&gt;\n      &lt;td&gt;40.557692&lt;/td&gt;\n      &lt;td&gt;18.846154&lt;/td&gt;\n      &lt;td&gt;194.807692&lt;/td&gt;\n      &lt;td&gt;3995.192308&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th rowspan=&quot;6&quot; valign=&quot;top&quot;&gt;Chinstrap&lt;/th&gt;\n      &lt;th rowspan=&quot;3&quot; valign=&quot;top&quot;&gt;female&lt;/th&gt;\n      &lt;th&gt;2007&lt;/th&gt;\n      &lt;td&gt;46.569231&lt;/td&gt;\n      &lt;td&gt;17.838462&lt;/td&gt;\n      &lt;td&gt;188.692308&lt;/td&gt;\n      &lt;td&gt;3569.230769&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2008&lt;/th&gt;\n      &lt;td&gt;46.000000&lt;/td&gt;\n      &lt;td&gt;17.300000&lt;/td&gt;\n      &lt;td&gt;192.666667&lt;/td&gt;\n      &lt;td&gt;3472.222222&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2009&lt;/th&gt;\n      &lt;td&gt;47.008333&lt;/td&gt;\n      &lt;td&gt;17.533333&lt;/td&gt;\n      &lt;td&gt;194.333333&lt;/td&gt;\n      &lt;td&gt;3522.916667&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th rowspan=&quot;3&quot; valign=&quot;top&quot;&gt;male&lt;/th&gt;\n      &lt;th&gt;2007&lt;/th&gt;\n      &lt;td&gt;50.876923&lt;/td&gt;\n      &lt;td&gt;19.130769&lt;/td&gt;\n      &lt;td&gt;196.153846&lt;/td&gt;\n      &lt;td&gt;3819.230769&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2008&lt;/th&gt;\n      &lt;td&gt;51.400000&lt;/td&gt;\n      &lt;td&gt;19.600000&lt;/td&gt;\n      &lt;td&gt;202.777778&lt;/td&gt;\n      &lt;td&gt;4127.777778&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2009&lt;/th&gt;\n      &lt;td&gt;51.100000&lt;/td&gt;\n      &lt;td&gt;19.125000&lt;/td&gt;\n      &lt;td&gt;201.833333&lt;/td&gt;\n      &lt;td&gt;3927.083333&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th rowspan=&quot;6&quot; valign=&quot;top&quot;&gt;Gentoo&lt;/th&gt;\n      &lt;th rowspan=&quot;3&quot; valign=&quot;top&quot;&gt;female&lt;/th&gt;\n      &lt;th&gt;2007&lt;/th&gt;\n      &lt;td&gt;45.062500&lt;/td&gt;\n      &lt;td&gt;13.993750&lt;/td&gt;\n      &lt;td&gt;211.062500&lt;/td&gt;\n      &lt;td&gt;4618.750000&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2008&lt;/th&gt;\n      &lt;td&gt;45.295455&lt;/td&gt;\n      &lt;td&gt;14.131818&lt;/td&gt;\n      &lt;td&gt;213.000000&lt;/td&gt;\n      &lt;td&gt;4627.272727&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2009&lt;/th&gt;\n      &lt;td&gt;46.260000&lt;/td&gt;\n      &lt;td&gt;14.550000&lt;/td&gt;\n      &lt;td&gt;213.700000&lt;/td&gt;\n      &lt;td&gt;4786.250000&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th rowspan=&quot;3&quot; valign=&quot;top&quot;&gt;male&lt;/th&gt;\n      &lt;th&gt;2007&lt;/th&gt;\n      &lt;td&gt;49.000000&lt;/td&gt;\n      &lt;td&gt;15.364706&lt;/td&gt;\n      &lt;td&gt;218.882353&lt;/td&gt;\n      &lt;td&gt;5552.941176&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2008&lt;/th&gt;\n      &lt;td&gt;48.539130&lt;/td&gt;\n      &lt;td&gt;15.704348&lt;/td&gt;\n      &lt;td&gt;222.086957&lt;/td&gt;\n      &lt;td&gt;5410.869565&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2009&lt;/th&gt;\n      &lt;td&gt;50.880952&lt;/td&gt;\n      &lt;td&gt;16.019048&lt;/td&gt;\n      &lt;td&gt;223.095238&lt;/td&gt;\n      &lt;td&gt;5510.714286&lt;/td&gt;\n    &lt;/tr&gt;\n  &lt;/tbody&gt;\n&lt;/table&gt;", "disable_math": true}}]}}, {"type": "object", "name": "panel.models.location.Location", "id": "p1104", "attributes": {"name": "location", "reload": false}}], "defs": [{"type": "model", "name": "ReactiveHTML1"}, {"type": "model", "name": "FlexBox1", "properties": [{"name": "align_content", "kind": "Any", "default": "flex-start"}, {"name": "align_items", "kind": "Any", "default": "flex-start"}, {"name": "flex_direction", "kind": "Any", "default": "row"}, {"name": "flex_wrap", "kind": "Any", "default": "wrap"}, {"name": "gap", "kind": "Any", "default": ""}, {"name": "justify_content", "kind": "Any", "default": "flex-start"}]}, {"type": "model", "name": "FloatPanel1", "properties": [{"name": "config", "kind": "Any", "default": {"type": "map"}}, {"name": "contained", "kind": "Any", "default": true}, {"name": "position", "kind": "Any", "default": "right-top"}, {"name": "offsetx", "kind": "Any", "default": null}, {"name": "offsety", "kind": "Any", "default": null}, {"name": "theme", "kind": "Any", "default": "primary"}, {"name": "status", "kind": "Any", "default": "normalized"}]}, {"type": "model", "name": "GridStack1", "properties": [{"name": "mode", "kind": "Any", "default": "warn"}, {"name": "ncols", "kind": "Any", "default": null}, {"name": "nrows", "kind": "Any", "default": null}, {"name": "allow_resize", "kind": "Any", "default": true}, {"name": "allow_drag", "kind": "Any", "default": true}, {"name": "state", "kind": "Any", "default": []}]}, {"type": "model", "name": "drag1", "properties": [{"name": "slider_width", "kind": "Any", "default": 5}, {"name": "slider_color", "kind": "Any", "default": "black"}, {"name": "value", "kind": "Any", "default": 50}]}, {"type": "model", "name": "click1", "properties": [{"name": "terminal_output", "kind": "Any", "default": ""}, {"name": "debug_name", "kind": "Any", "default": ""}, {"name": "clears", "kind": "Any", "default": 0}]}, {"type": "model", "name": "FastWrapper1", "properties": [{"name": "object", "kind": "Any", "default": null}, {"name": "style", "kind": "Any", "default": null}]}, {"type": "model", "name": "NotificationAreaBase1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}]}, {"type": "model", "name": "NotificationArea1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "notifications", "kind": "Any", "default": []}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}, {"name": "types", "kind": "Any", "default": [{"type": "map", "entries": [["type", "warning"], ["background", "#ffc107"], ["icon", {"type": "map", "entries": [["className", "fas fa-exclamation-triangle"], ["tagName", "i"], ["color", "white"]]}]]}, {"type": "map", "entries": [["type", "info"], ["background", "#007bff"], ["icon", {"type": "map", "entries": [["className", "fas fa-info-circle"], ["tagName", "i"], ["color", "white"]]}]]}]}]}, {"type": "model", "name": "Notification", "properties": [{"name": "background", "kind": "Any", "default": null}, {"name": "duration", "kind": "Any", "default": 3000}, {"name": "icon", "kind": "Any", "default": null}, {"name": "message", "kind": "Any", "default": ""}, {"name": "notification_type", "kind": "Any", "default": null}, {"name": "_destroyed", "kind": "Any", "default": false}]}, {"type": "model", "name": "TemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "BootstrapTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "TemplateEditor1", "properties": [{"name": "layout", "kind": "Any", "default": []}]}, {"type": "model", "name": "MaterialTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "ReactiveESM1"}, {"type": "model", "name": "JSComponent1"}, {"type": "model", "name": "ReactComponent1"}, {"type": "model", "name": "AnyWidgetComponent1"}, {"type": "model", "name": "request_value1", "properties": [{"name": "fill", "kind": "Any", "default": "none"}, {"name": "_synced", "kind": "Any", "default": null}, {"name": "_request_sync", "kind": "Any", "default": 0}]}, {"type": "model", "name": "DownloadButton1", "properties": [{"name": "color", "kind": "Any", "default": "grey"}, {"name": "data", "kind": "Any", "default": ""}, {"name": "filename", "kind": "Any", "default": ""}, {"name": "hide", "kind": "Any", "default": false}, {"name": "size", "kind": "Any", "default": 20}]}, {"type": "model", "name": "clicked1", "properties": [{"name": "disabled", "kind": "Any", "default": false}, {"name": "color", "kind": "Any", "default": null}, {"name": "icon", "kind": "Any", "default": null}, {"name": "size", "kind": "Any", "default": 12}]}]}, "version": "3.6.0"})
+                } else {
+                   setTimeout(embed_bokeh_4, 200)
+                }
+              };
+              embed_bokeh_4()
+            </script>
+            <section id="programmatically-building-pipelines">
+<h3>Programmatically building pipelines<a class="headerlink" href="#programmatically-building-pipelines" title="Link to this heading">#</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> does not have to be built using the declarative specification, instead we can programmatically build the same pipeline:</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lumen.sources</span> <span class="kn">import</span> <span class="n">FileSource</span>
+
+<span class="n">source</span> <span class="o">=</span> <span class="n">FileSource</span><span class="p">(</span><span class="n">tables</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;penguins&#39;</span><span class="p">:</span> <span class="n">data_url</span><span class="p">})</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="s1">&#39;penguins&#39;</span><span class="p">)</span>
+
+<span class="n">pipeline</span><span class="o">.</span><span class="n">add_filter</span><span class="p">(</span><span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">&#39;species&#39;</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">add_filter</span><span class="p">(</span><span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">&#39;island&#39;</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">add_filter</span><span class="p">(</span><span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">&#39;sex&#39;</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">add_filter</span><span class="p">(</span><span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">&#39;year&#39;</span><span class="p">)</span>
+
+<span class="n">pipeline</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell5-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell5-py" class="pyodide-stderr" ></pre><div id="output-codecell5-py" class="pyodide-output embedded"></div>
+
+            <script>
+              async function embed_bokeh_5 () {
+                if (window.Bokeh && window.Bokeh.Panel && window.Tabulator) {
+                  await Bokeh.embed.embed_item({"target_id": "output-codecell5-py", "root_id": "p1105", "doc": {"version": "3.6.0", "title": "Panel Application", "roots": [{"type": "object", "name": "Row", "id": "p1105", "attributes": {"name": "Row00665", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"type": "object", "name": "ImportedStyleSheet", "id": "p1109", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/loading.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1124", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/listpanel.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1107", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/default.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1108", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/native.css"}}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.layout.Column", "id": "p1106", "attributes": {"name": "Column00656", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1109"}, {"id": "p1124"}, {"id": "p1107"}, {"id": "p1108"}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.markup.HTML", "id": "p1111", "attributes": {"css_classes": ["markdown"], "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1109"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1110", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/markdown.css"}}, {"id": "p1107"}, {"id": "p1108"}], "margin": [5, 10], "align": "start", "text": "&lt;div style=&quot;font-size: 1.5em; font-weight: bold;&quot;&gt;Filters&lt;/div&gt;"}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1114", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1109"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1113", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/select.css"}}, {"id": "p1107"}, {"id": "p1108"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Species", "options": ["Adelie", "Chinstrap", "Gentoo"]}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1117", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1109"}, {"id": "p1113"}, {"id": "p1107"}, {"id": "p1108"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Island", "options": ["Biscoe", "Dream", "Torgersen"]}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1120", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1109"}, {"id": "p1113"}, {"id": "p1107"}, {"id": "p1108"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Sex", "options": ["male", "female", "nan"]}}, {"type": "object", "name": "RangeSlider", "id": "p1122", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1109"}, {"id": "p1107"}, {"id": "p1108"}], "margin": [5, 10], "align": "start", "title": "Year", "value": [2007, 2009], "start": 2007, "end": 2009}}]}}, {"type": "object", "name": "panel.models.tabulator.DataTabulator", "id": "p1177", "attributes": {"subscribed_events": {"type": "set", "entries": ["selection-change", "cell-click", "table-edit"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1109"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1127", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/font-awesome/css/all.min.css"}}, {"id": "p1107"}, {"id": "p1108"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1125", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/datatabulator/tabulator-tables@6.3.0/dist/css/tabulator_simple.min.css"}}], "margin": [5, 10], "align": "start", "configuration": {"type": "map", "entries": [["selectable", true], ["columns", [{"type": "map", "entries": [["field", "index"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "species"]]}, {"type": "map", "entries": [["field", "island"]]}, {"type": "map", "entries": [["field", "bill_length_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "bill_depth_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "flipper_length_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "body_mass_g"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "sex"]]}, {"type": "map", "entries": [["field", "year"], ["sorter", "number"]]}]], ["dataTree", false]]}, "columns": [{"type": "object", "name": "TableColumn", "id": "p1131", "attributes": {"field": "index", "title": "index", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1130", "attributes": {"text_align": {"type": "value", "value": "left"}}}, "editor": {"type": "object", "name": "CellEditor", "id": "p1129"}}}, {"type": "object", "name": "TableColumn", "id": "p1136", "attributes": {"field": "species", "title": "species", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1135", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "StringEditor", "id": "p1134"}}}, {"type": "object", "name": "TableColumn", "id": "p1141", "attributes": {"field": "island", "title": "island", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1140", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "StringEditor", "id": "p1139"}}}, {"type": "object", "name": "TableColumn", "id": "p1146", "attributes": {"field": "bill_length_mm", "title": "bill_length_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1145", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1144"}}}, {"type": "object", "name": "TableColumn", "id": "p1151", "attributes": {"field": "bill_depth_mm", "title": "bill_depth_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1150", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1149"}}}, {"type": "object", "name": "TableColumn", "id": "p1156", "attributes": {"field": "flipper_length_mm", "title": "flipper_length_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1155", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1154"}}}, {"type": "object", "name": "TableColumn", "id": "p1161", "attributes": {"field": "body_mass_g", "title": "body_mass_g", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1160", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1159"}}}, {"type": "object", "name": "TableColumn", "id": "p1166", "attributes": {"field": "sex", "title": "sex", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1165", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "StringEditor", "id": "p1164"}}}, {"type": "object", "name": "TableColumn", "id": "p1171", "attributes": {"field": "year", "title": "year", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1170", "attributes": {"text_align": {"type": "value", "value": "right"}}}, "editor": {"type": "object", "name": "IntEditor", "id": "p1169"}}}], "indexes": ["index"], "layout": "fit_data_table", "source": {"type": "object", "name": "ColumnDataSource", "id": "p1174", "attributes": {"selected": {"type": "object", "name": "Selection", "id": "p1175", "attributes": {"indices": [], "line_indices": []}}, "selection_policy": {"type": "object", "name": "UnionRenderers", "id": "p1176"}, "data": {"type": "map", "entries": [["index", {"type": "ndarray", "array": {"type": "bytes", "data": "AAAAAAEAAAACAAAAAwAAAAQAAAAFAAAABgAAAAcAAAAIAAAACQAAAAoAAAALAAAADAAAAA0AAAAOAAAADwAAABAAAAARAAAAEgAAABMAAAA="}, "shape": [20], "dtype": "int32", "order": "little"}], ["species", {"type": "ndarray", "array": ["Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie"], "shape": [20], "dtype": "object", "order": "little"}], ["island", {"type": "ndarray", "array": ["Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen"], "shape": [20], "dtype": "object", "order": "little"}], ["bill_length_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "zczMzMyMQ0AAAAAAAMBDQGZmZmZmJkRAAAAAAAAA+H+amZmZmVlCQGZmZmZmpkNAMzMzMzNzQ0CamZmZmZlDQM3MzMzMDEFAAAAAAAAARUBmZmZmZuZCQGZmZmZm5kJAzczMzMyMREDNzMzMzExDQM3MzMzMTEFAzczMzMxMQkCamZmZmVlDQAAAAAAAQEVAMzMzMzMzQUAAAAAAAABHQA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["bill_depth_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "MzMzMzOzMkBmZmZmZmYxQAAAAAAAADJAAAAAAAAA+H/NzMzMzEwzQJqZmZmZmTRAzczMzMzMMUCamZmZmZkzQJqZmZmZGTJAMzMzMzMzNECamZmZmRkxQM3MzMzMTDFAmpmZmZmZMUAzMzMzMzM1QJqZmZmZGTVAzczMzMzMMUAAAAAAAAAzQDMzMzMzszRAZmZmZmZmMkAAAAAAAIA1QA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["flipper_length_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "AAAAAACgZkAAAAAAAEBnQAAAAAAAYGhAAAAAAAAA+H8AAAAAACBoQAAAAAAAwGdAAAAAAACgZkAAAAAAAGBoQAAAAAAAIGhAAAAAAADAZ0AAAAAAAEBnQAAAAAAAgGZAAAAAAADAZkAAAAAAAOBnQAAAAAAAwGhAAAAAAAAgZ0AAAAAAAGBoQAAAAAAAoGhAAAAAAAAAZ0AAAAAAAEBoQA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["body_mass_g", {"type": "ndarray", "array": {"type": "bytes", "data": "AAAAAABMrUAAAAAAALCtQAAAAAAAZKlAAAAAAAAA+H8AAAAAAPSqQAAAAAAAhKxAAAAAAABSrEAAAAAAAEOyQAAAAAAAJqtAAAAAAACasEAAAAAAAMipQAAAAAAA6KxAAAAAAAAAqUAAAAAAALCtQAAAAAAAMLFAAAAAAADorEAAAAAAAPSqQAAAAAAAlLFAAAAAAAD6qUAAAAAAAGiwQA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["sex", {"type": "ndarray", "array": ["male", "female", "female", {"type": "number", "value": "nan"}, "female", "male", "female", "male", {"type": "number", "value": "nan"}, {"type": "number", "value": "nan"}, {"type": "number", "value": "nan"}, {"type": "number", "value": "nan"}, "female", "male", "male", "female", "female", "male", "female", "male"], "shape": [20], "dtype": "object", "order": "little"}], ["year", {"type": "ndarray", "array": {"type": "bytes", "data": "1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAAA="}, "shape": [20], "dtype": "int32", "order": "little"}]]}}}, "cell_styles": {"type": "map", "entries": [["id", "5b3ce02f9305479bba184dce3d118ccd"], ["data", {"type": "map"}]]}, "pagination": "remote", "page": 1, "max_page": 18, "select_mode": true, "selectable_rows": null}}]}}, {"type": "object", "name": "panel.models.location.Location", "id": "p1180", "attributes": {"name": "location", "reload": false}}], "defs": [{"type": "model", "name": "ReactiveHTML1"}, {"type": "model", "name": "FlexBox1", "properties": [{"name": "align_content", "kind": "Any", "default": "flex-start"}, {"name": "align_items", "kind": "Any", "default": "flex-start"}, {"name": "flex_direction", "kind": "Any", "default": "row"}, {"name": "flex_wrap", "kind": "Any", "default": "wrap"}, {"name": "gap", "kind": "Any", "default": ""}, {"name": "justify_content", "kind": "Any", "default": "flex-start"}]}, {"type": "model", "name": "FloatPanel1", "properties": [{"name": "config", "kind": "Any", "default": {"type": "map"}}, {"name": "contained", "kind": "Any", "default": true}, {"name": "position", "kind": "Any", "default": "right-top"}, {"name": "offsetx", "kind": "Any", "default": null}, {"name": "offsety", "kind": "Any", "default": null}, {"name": "theme", "kind": "Any", "default": "primary"}, {"name": "status", "kind": "Any", "default": "normalized"}]}, {"type": "model", "name": "GridStack1", "properties": [{"name": "mode", "kind": "Any", "default": "warn"}, {"name": "ncols", "kind": "Any", "default": null}, {"name": "nrows", "kind": "Any", "default": null}, {"name": "allow_resize", "kind": "Any", "default": true}, {"name": "allow_drag", "kind": "Any", "default": true}, {"name": "state", "kind": "Any", "default": []}]}, {"type": "model", "name": "drag1", "properties": [{"name": "slider_width", "kind": "Any", "default": 5}, {"name": "slider_color", "kind": "Any", "default": "black"}, {"name": "value", "kind": "Any", "default": 50}]}, {"type": "model", "name": "click1", "properties": [{"name": "terminal_output", "kind": "Any", "default": ""}, {"name": "debug_name", "kind": "Any", "default": ""}, {"name": "clears", "kind": "Any", "default": 0}]}, {"type": "model", "name": "FastWrapper1", "properties": [{"name": "object", "kind": "Any", "default": null}, {"name": "style", "kind": "Any", "default": null}]}, {"type": "model", "name": "NotificationAreaBase1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}]}, {"type": "model", "name": "NotificationArea1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "notifications", "kind": "Any", "default": []}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}, {"name": "types", "kind": "Any", "default": [{"type": "map", "entries": [["type", "warning"], ["background", "#ffc107"], ["icon", {"type": "map", "entries": [["className", "fas fa-exclamation-triangle"], ["tagName", "i"], ["color", "white"]]}]]}, {"type": "map", "entries": [["type", "info"], ["background", "#007bff"], ["icon", {"type": "map", "entries": [["className", "fas fa-info-circle"], ["tagName", "i"], ["color", "white"]]}]]}]}]}, {"type": "model", "name": "Notification", "properties": [{"name": "background", "kind": "Any", "default": null}, {"name": "duration", "kind": "Any", "default": 3000}, {"name": "icon", "kind": "Any", "default": null}, {"name": "message", "kind": "Any", "default": ""}, {"name": "notification_type", "kind": "Any", "default": null}, {"name": "_destroyed", "kind": "Any", "default": false}]}, {"type": "model", "name": "TemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "BootstrapTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "TemplateEditor1", "properties": [{"name": "layout", "kind": "Any", "default": []}]}, {"type": "model", "name": "MaterialTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "ReactiveESM1"}, {"type": "model", "name": "JSComponent1"}, {"type": "model", "name": "ReactComponent1"}, {"type": "model", "name": "AnyWidgetComponent1"}, {"type": "model", "name": "request_value1", "properties": [{"name": "fill", "kind": "Any", "default": "none"}, {"name": "_synced", "kind": "Any", "default": null}, {"name": "_request_sync", "kind": "Any", "default": 0}]}, {"type": "model", "name": "DownloadButton1", "properties": [{"name": "color", "kind": "Any", "default": "grey"}, {"name": "data", "kind": "Any", "default": ""}, {"name": "filename", "kind": "Any", "default": ""}, {"name": "hide", "kind": "Any", "default": false}, {"name": "size", "kind": "Any", "default": 20}]}, {"type": "model", "name": "clicked1", "properties": [{"name": "disabled", "kind": "Any", "default": false}, {"name": "color", "kind": "Any", "default": null}, {"name": "icon", "kind": "Any", "default": null}, {"name": "size", "kind": "Any", "default": 12}]}]}, "version": "3.6.0"})
+                } else {
+                   setTimeout(embed_bokeh_5, 200)
+                }
+              };
+              embed_bokeh_5()
+            </script>
+            </section>
+</section>
+<section id="automatic-filters">
+<h2>Automatic filters<a class="headerlink" href="#automatic-filters" title="Link to this heading">#</a></h2>
+<p>By setting <code class="docutils literal notranslate"><span class="pre">filters='auto'</span></code> we can also have Lumen automatically generate filters for all available columns:</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Pipeline</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="s1">&#39;penguins&#39;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell6-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell6-py" class="pyodide-stderr" ></pre><div id="output-codecell6-py" class="pyodide-output embedded"></div>
+
+            <script>
+              async function embed_bokeh_6 () {
+                if (window.Bokeh && window.Bokeh.Panel && window.Tabulator) {
+                  await Bokeh.embed.embed_item({"target_id": "output-codecell6-py", "root_id": "p1187", "doc": {"version": "3.6.0", "title": "Panel Application", "roots": [{"type": "object", "name": "Row", "id": "p1187", "attributes": {"name": "Row01156", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"type": "object", "name": "ImportedStyleSheet", "id": "p1191", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/loading.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1214", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/listpanel.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1189", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/default.css"}}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1190", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/theme/native.css"}}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.layout.Column", "id": "p1188", "attributes": {"name": "Column01144", "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1214"}, {"id": "p1189"}, {"id": "p1190"}], "margin": 0, "align": "start", "children": [{"type": "object", "name": "panel.models.markup.HTML", "id": "p1193", "attributes": {"css_classes": ["markdown"], "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1192", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/markdown.css"}}, {"id": "p1189"}, {"id": "p1190"}], "margin": [5, 10], "align": "start", "text": "&lt;div style=&quot;font-size: 1.5em; font-weight: bold;&quot;&gt;Filters&lt;/div&gt;"}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1196", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1195", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/css/select.css"}}, {"id": "p1189"}, {"id": "p1190"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Species", "options": ["Adelie", "Chinstrap", "Gentoo"]}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1199", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1195"}, {"id": "p1189"}, {"id": "p1190"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Island", "options": ["Biscoe", "Dream", "Torgersen"]}}, {"type": "object", "name": "RangeSlider", "id": "p1201", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1189"}, {"id": "p1190"}], "margin": [5, 10], "align": "start", "title": "Bill_Length_Mm", "value": [32.1, 59.6], "start": 32.1, "end": 59.6, "step": 0.1}}, {"type": "object", "name": "RangeSlider", "id": "p1203", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1189"}, {"id": "p1190"}], "margin": [5, 10], "align": "start", "title": "Bill_Depth_Mm", "value": [13.1, 21.5], "start": 13.1, "end": 21.5, "step": 0.1}}, {"type": "object", "name": "RangeSlider", "id": "p1205", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1189"}, {"id": "p1190"}], "margin": [5, 10], "align": "start", "title": "Flipper_Length_Mm", "value": [172.0, 231.0], "start": 172.0, "end": 231.0, "step": 0.1}}, {"type": "object", "name": "RangeSlider", "id": "p1207", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1189"}, {"id": "p1190"}], "margin": [5, 10], "align": "start", "title": "Body_Mass_G", "value": [2700.0, 6300.0], "start": 2700.0, "end": 6300.0, "step": 0.1}}, {"type": "object", "name": "panel.models.widgets.CustomMultiSelect", "id": "p1210", "attributes": {"subscribed_events": {"type": "set", "entries": ["dblclick_event"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1195"}, {"id": "p1189"}, {"id": "p1190"}], "width": 300, "min_width": 300, "margin": [5, 10], "align": "start", "title": "Sex", "options": ["male", "female", "nan"]}}, {"type": "object", "name": "RangeSlider", "id": "p1212", "attributes": {"stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"id": "p1189"}, {"id": "p1190"}], "margin": [5, 10], "align": "start", "title": "Year", "value": [2007, 2009], "start": 2007, "end": 2009}}]}}, {"type": "object", "name": "panel.models.tabulator.DataTabulator", "id": "p1267", "attributes": {"subscribed_events": {"type": "set", "entries": ["selection-change", "cell-click", "table-edit"]}, "stylesheets": ["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #0072B5;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}", {"id": "p1191"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1217", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/font-awesome/css/all.min.css"}}, {"id": "p1189"}, {"id": "p1190"}, {"type": "object", "name": "ImportedStyleSheet", "id": "p1215", "attributes": {"url": "https://cdn.holoviz.org/panel/1.5.3-b.1/dist/bundled/datatabulator/tabulator-tables@6.3.0/dist/css/tabulator_simple.min.css"}}], "margin": [5, 10], "align": "start", "configuration": {"type": "map", "entries": [["selectable", true], ["columns", [{"type": "map", "entries": [["field", "index"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "species"]]}, {"type": "map", "entries": [["field", "island"]]}, {"type": "map", "entries": [["field", "bill_length_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "bill_depth_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "flipper_length_mm"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "body_mass_g"], ["sorter", "number"]]}, {"type": "map", "entries": [["field", "sex"]]}, {"type": "map", "entries": [["field", "year"], ["sorter", "number"]]}]], ["dataTree", false]]}, "columns": [{"type": "object", "name": "TableColumn", "id": "p1221", "attributes": {"field": "index", "title": "index", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1220", "attributes": {"text_align": {"type": "value", "value": "left"}}}, "editor": {"type": "object", "name": "CellEditor", "id": "p1219"}}}, {"type": "object", "name": "TableColumn", "id": "p1226", "attributes": {"field": "species", "title": "species", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1225", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "StringEditor", "id": "p1224"}}}, {"type": "object", "name": "TableColumn", "id": "p1231", "attributes": {"field": "island", "title": "island", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1230", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "StringEditor", "id": "p1229"}}}, {"type": "object", "name": "TableColumn", "id": "p1236", "attributes": {"field": "bill_length_mm", "title": "bill_length_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1235", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1234"}}}, {"type": "object", "name": "TableColumn", "id": "p1241", "attributes": {"field": "bill_depth_mm", "title": "bill_depth_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1240", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1239"}}}, {"type": "object", "name": "TableColumn", "id": "p1246", "attributes": {"field": "flipper_length_mm", "title": "flipper_length_mm", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1245", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1244"}}}, {"type": "object", "name": "TableColumn", "id": "p1251", "attributes": {"field": "body_mass_g", "title": "body_mass_g", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1250", "attributes": {"text_align": {"type": "value", "value": "right"}, "format": "0,0.0[00000]"}}, "editor": {"type": "object", "name": "NumberEditor", "id": "p1249"}}}, {"type": "object", "name": "TableColumn", "id": "p1256", "attributes": {"field": "sex", "title": "sex", "width": 0, "formatter": {"type": "object", "name": "StringFormatter", "id": "p1255", "attributes": {"null_format": ""}}, "editor": {"type": "object", "name": "StringEditor", "id": "p1254"}}}, {"type": "object", "name": "TableColumn", "id": "p1261", "attributes": {"field": "year", "title": "year", "width": 0, "formatter": {"type": "object", "name": "NumberFormatter", "id": "p1260", "attributes": {"text_align": {"type": "value", "value": "right"}}}, "editor": {"type": "object", "name": "IntEditor", "id": "p1259"}}}], "indexes": ["index"], "layout": "fit_data_table", "source": {"type": "object", "name": "ColumnDataSource", "id": "p1264", "attributes": {"selected": {"type": "object", "name": "Selection", "id": "p1265", "attributes": {"indices": [], "line_indices": []}}, "selection_policy": {"type": "object", "name": "UnionRenderers", "id": "p1266"}, "data": {"type": "map", "entries": [["index", {"type": "ndarray", "array": {"type": "bytes", "data": "AAAAAAEAAAACAAAAAwAAAAQAAAAFAAAABgAAAAcAAAAIAAAACQAAAAoAAAALAAAADAAAAA0AAAAOAAAADwAAABAAAAARAAAAEgAAABMAAAA="}, "shape": [20], "dtype": "int32", "order": "little"}], ["species", {"type": "ndarray", "array": ["Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie"], "shape": [20], "dtype": "object", "order": "little"}], ["island", {"type": "ndarray", "array": ["Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen", "Torgersen"], "shape": [20], "dtype": "object", "order": "little"}], ["bill_length_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "zczMzMyMQ0AAAAAAAMBDQGZmZmZmJkRAAAAAAAAA+H+amZmZmVlCQGZmZmZmpkNAMzMzMzNzQ0CamZmZmZlDQM3MzMzMDEFAAAAAAAAARUBmZmZmZuZCQGZmZmZm5kJAzczMzMyMREDNzMzMzExDQM3MzMzMTEFAzczMzMxMQkCamZmZmVlDQAAAAAAAQEVAMzMzMzMzQUAAAAAAAABHQA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["bill_depth_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "MzMzMzOzMkBmZmZmZmYxQAAAAAAAADJAAAAAAAAA+H/NzMzMzEwzQJqZmZmZmTRAzczMzMzMMUCamZmZmZkzQJqZmZmZGTJAMzMzMzMzNECamZmZmRkxQM3MzMzMTDFAmpmZmZmZMUAzMzMzMzM1QJqZmZmZGTVAzczMzMzMMUAAAAAAAAAzQDMzMzMzszRAZmZmZmZmMkAAAAAAAIA1QA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["flipper_length_mm", {"type": "ndarray", "array": {"type": "bytes", "data": "AAAAAACgZkAAAAAAAEBnQAAAAAAAYGhAAAAAAAAA+H8AAAAAACBoQAAAAAAAwGdAAAAAAACgZkAAAAAAAGBoQAAAAAAAIGhAAAAAAADAZ0AAAAAAAEBnQAAAAAAAgGZAAAAAAADAZkAAAAAAAOBnQAAAAAAAwGhAAAAAAAAgZ0AAAAAAAGBoQAAAAAAAoGhAAAAAAAAAZ0AAAAAAAEBoQA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["body_mass_g", {"type": "ndarray", "array": {"type": "bytes", "data": "AAAAAABMrUAAAAAAALCtQAAAAAAAZKlAAAAAAAAA+H8AAAAAAPSqQAAAAAAAhKxAAAAAAABSrEAAAAAAAEOyQAAAAAAAJqtAAAAAAACasEAAAAAAAMipQAAAAAAA6KxAAAAAAAAAqUAAAAAAALCtQAAAAAAAMLFAAAAAAADorEAAAAAAAPSqQAAAAAAAlLFAAAAAAAD6qUAAAAAAAGiwQA=="}, "shape": [20], "dtype": "float64", "order": "little"}], ["sex", {"type": "ndarray", "array": ["male", "female", "female", {"type": "number", "value": "nan"}, "female", "male", "female", "male", {"type": "number", "value": "nan"}, {"type": "number", "value": "nan"}, {"type": "number", "value": "nan"}, {"type": "number", "value": "nan"}, "female", "male", "male", "female", "female", "male", "female", "male"], "shape": [20], "dtype": "object", "order": "little"}], ["year", {"type": "ndarray", "array": {"type": "bytes", "data": "1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAADXBwAA1wcAANcHAAA="}, "shape": [20], "dtype": "int32", "order": "little"}]]}}}, "cell_styles": {"type": "map", "entries": [["id", "1b5f0545adb443ef98c1d08b22ee892d"], ["data", {"type": "map"}]]}, "pagination": "remote", "page": 1, "max_page": 18, "select_mode": true, "selectable_rows": null}}]}}, {"type": "object", "name": "panel.models.location.Location", "id": "p1270", "attributes": {"name": "location", "reload": false}}], "defs": [{"type": "model", "name": "ReactiveHTML1"}, {"type": "model", "name": "FlexBox1", "properties": [{"name": "align_content", "kind": "Any", "default": "flex-start"}, {"name": "align_items", "kind": "Any", "default": "flex-start"}, {"name": "flex_direction", "kind": "Any", "default": "row"}, {"name": "flex_wrap", "kind": "Any", "default": "wrap"}, {"name": "gap", "kind": "Any", "default": ""}, {"name": "justify_content", "kind": "Any", "default": "flex-start"}]}, {"type": "model", "name": "FloatPanel1", "properties": [{"name": "config", "kind": "Any", "default": {"type": "map"}}, {"name": "contained", "kind": "Any", "default": true}, {"name": "position", "kind": "Any", "default": "right-top"}, {"name": "offsetx", "kind": "Any", "default": null}, {"name": "offsety", "kind": "Any", "default": null}, {"name": "theme", "kind": "Any", "default": "primary"}, {"name": "status", "kind": "Any", "default": "normalized"}]}, {"type": "model", "name": "GridStack1", "properties": [{"name": "mode", "kind": "Any", "default": "warn"}, {"name": "ncols", "kind": "Any", "default": null}, {"name": "nrows", "kind": "Any", "default": null}, {"name": "allow_resize", "kind": "Any", "default": true}, {"name": "allow_drag", "kind": "Any", "default": true}, {"name": "state", "kind": "Any", "default": []}]}, {"type": "model", "name": "drag1", "properties": [{"name": "slider_width", "kind": "Any", "default": 5}, {"name": "slider_color", "kind": "Any", "default": "black"}, {"name": "value", "kind": "Any", "default": 50}]}, {"type": "model", "name": "click1", "properties": [{"name": "terminal_output", "kind": "Any", "default": ""}, {"name": "debug_name", "kind": "Any", "default": ""}, {"name": "clears", "kind": "Any", "default": 0}]}, {"type": "model", "name": "FastWrapper1", "properties": [{"name": "object", "kind": "Any", "default": null}, {"name": "style", "kind": "Any", "default": null}]}, {"type": "model", "name": "NotificationAreaBase1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}]}, {"type": "model", "name": "NotificationArea1", "properties": [{"name": "js_events", "kind": "Any", "default": {"type": "map"}}, {"name": "notifications", "kind": "Any", "default": []}, {"name": "position", "kind": "Any", "default": "bottom-right"}, {"name": "_clear", "kind": "Any", "default": 0}, {"name": "types", "kind": "Any", "default": [{"type": "map", "entries": [["type", "warning"], ["background", "#ffc107"], ["icon", {"type": "map", "entries": [["className", "fas fa-exclamation-triangle"], ["tagName", "i"], ["color", "white"]]}]]}, {"type": "map", "entries": [["type", "info"], ["background", "#007bff"], ["icon", {"type": "map", "entries": [["className", "fas fa-info-circle"], ["tagName", "i"], ["color", "white"]]}]]}]}]}, {"type": "model", "name": "Notification", "properties": [{"name": "background", "kind": "Any", "default": null}, {"name": "duration", "kind": "Any", "default": 3000}, {"name": "icon", "kind": "Any", "default": null}, {"name": "message", "kind": "Any", "default": ""}, {"name": "notification_type", "kind": "Any", "default": null}, {"name": "_destroyed", "kind": "Any", "default": false}]}, {"type": "model", "name": "TemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "BootstrapTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "TemplateEditor1", "properties": [{"name": "layout", "kind": "Any", "default": []}]}, {"type": "model", "name": "MaterialTemplateActions1", "properties": [{"name": "open_modal", "kind": "Any", "default": 0}, {"name": "close_modal", "kind": "Any", "default": 0}]}, {"type": "model", "name": "ReactiveESM1"}, {"type": "model", "name": "JSComponent1"}, {"type": "model", "name": "ReactComponent1"}, {"type": "model", "name": "AnyWidgetComponent1"}, {"type": "model", "name": "request_value1", "properties": [{"name": "fill", "kind": "Any", "default": "none"}, {"name": "_synced", "kind": "Any", "default": null}, {"name": "_request_sync", "kind": "Any", "default": 0}]}, {"type": "model", "name": "DownloadButton1", "properties": [{"name": "color", "kind": "Any", "default": "grey"}, {"name": "data", "kind": "Any", "default": ""}, {"name": "filename", "kind": "Any", "default": ""}, {"name": "hide", "kind": "Any", "default": false}, {"name": "size", "kind": "Any", "default": 20}]}, {"type": "model", "name": "clicked1", "properties": [{"name": "disabled", "kind": "Any", "default": false}, {"name": "color", "kind": "Any", "default": null}, {"name": "icon", "kind": "Any", "default": null}, {"name": "size", "kind": "Any", "default": 12}]}]}, "version": "3.6.0"})
+                } else {
+                   setTimeout(embed_bokeh_6, 200)
+                }
+              };
+              embed_bokeh_6()
+            </script>
+            <section id="chaining-pipelines">
+<h3>Chaining pipelines<a class="headerlink" href="#chaining-pipelines" title="Link to this heading">#</a></h3>
+<p>In some cases you will want to build branching pipelines, e.g. in an initial stage you filter the data and display it and in another stage you aggregate your data.</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lumen.transforms</span> <span class="kn">import</span> <span class="n">Aggregate</span>
+
+<span class="n">agg_pipeline</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">transforms</span><span class="o">=</span><span class="p">[</span><span class="n">Aggregate</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">])])</span>
+
+<span class="n">agg_pipeline</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell7-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell7-py" class="pyodide-stderr" ></pre><div id="output-codecell7-py" class="pyodide-output embedded"><div class="pyodide-output-wrapper"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+    <tr>
+      <th>species</th>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="3" valign="top">Adelie</th>
+      <th>2007</th>
+      <td>38.824490</td>
+      <td>18.767347</td>
+      <td>186.591837</td>
+      <td>3696.428571</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>38.560000</td>
+      <td>18.192000</td>
+      <td>191.040000</td>
+      <td>3742.000000</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>38.982692</td>
+      <td>18.098077</td>
+      <td>192.076923</td>
+      <td>3664.903846</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">Chinstrap</th>
+      <th>2007</th>
+      <td>48.723077</td>
+      <td>18.484615</td>
+      <td>192.423077</td>
+      <td>3694.230769</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>48.700000</td>
+      <td>18.450000</td>
+      <td>197.722222</td>
+      <td>3800.000000</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>49.054167</td>
+      <td>18.329167</td>
+      <td>198.083333</td>
+      <td>3725.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">Gentoo</th>
+      <th>2007</th>
+      <td>47.014706</td>
+      <td>14.688235</td>
+      <td>215.117647</td>
+      <td>5070.588235</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>46.936957</td>
+      <td>14.923913</td>
+      <td>217.565217</td>
+      <td>5019.565217</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>48.500000</td>
+      <td>15.276744</td>
+      <td>218.418605</td>
+      <td>5140.697674</td>
+    </tr>
+  </tbody>
+</table></div></div>
+<p>By chaining the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> we can share computations between different stages, i.e. the filtering step still occurs in the first stage.</p>
+</section>
+</section>
+<section id="building-a-dashboard">
+<h2>Building a dashboard<a class="headerlink" href="#building-a-dashboard" title="Link to this heading">#</a></h2>
+<p>One of the major benefits of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> architecture is that it allows Lumen components to be used outside of the context of a Lumen application. This makes it possible to build custom dashboards while still leveraging the power of all Lumen components. Let us compose a simple dashboard application driven by the pipeline we defined above.</p>
+<div class="pyodide highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lumen.views</span> <span class="kn">import</span> <span class="n">hvPlotUIView</span>
+
+<span class="n">pn</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">control_panel</span><span class="o">.</span><span class="n">servable</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s1">&#39;sidebar&#39;</span><span class="p">),</span>
+    <span class="n">pn</span><span class="o">.</span><span class="n">Tabs</span><span class="p">(</span>
+        <span class="p">(</span><span class="s1">&#39;Plot&#39;</span><span class="p">,</span> <span class="n">hvPlotUIView</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;scatter&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;bill_length_mm&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;bill_depth_mm&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;species&#39;</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">&#39;Table&#39;</span><span class="p">,</span> <span class="n">Table</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">agg_pipeline</span><span class="p">))</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">servable</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<pre id="stdout-codecell8-py" class="pyodide-stdout" ></pre><pre id="stderr-codecell8-py" class="pyodide-stderr" style="display: block;">Traceback (most recent call last):
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/panel/io/mime_render.py&quot;, line 167, in exec_with_return
+    out = eval(compile(_convert_expr(last_ast.body[0]), &quot;&lt;ast&gt;&quot;, &quot;eval&quot;), global_context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;&lt;ast&gt;&quot;, line 5, in &lt;module&gt;
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/panel/layout/tabs.py&quot;, line 75, in __init__
+    super().__init__(*objects, **params)
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/panel/layout/base.py&quot;, line 567, in __init__
+    params[&#x27;objects&#x27;], self._names = self._to_objects_and_names(items)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/panel/layout/base.py&quot;, line 588, in _to_objects_and_names
+    pane, name = self._to_object_and_name(item)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/panel/layout/base.py&quot;, line 581, in _to_object_and_name
+    pane = panel(item, name=name)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/panel/pane/base.py&quot;, line 80, in panel
+    return obj._create_view()
+           ^^^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/panel/viewable.py&quot;, line 1050, in _create_view
+    view = panel(self.__panel__())
+                 ^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/lumen/views/base.py&quot;, line 748, in __panel__
+    panel = self.get_panel()
+            ^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/lumen/views/base.py&quot;, line 758, in get_panel
+    return hvDataFrameExplorer(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/hvplot/ui.py&quot;, line 597, in __init__
+    self._controllers = {
+                        ^
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/hvplot/ui.py&quot;, line 598, in &lt;dictcomp&gt;
+    cls.name.lower(): cls(df, explorer=self, **cparams)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/Users/runner/work/lumen/lumen/.pixi/envs/docs/lib/python3.11/site-packages/hvplot/ui.py&quot;, line 374, in __init__
+    raise ImportError(&#x27;GeoViews must be installed to enable the geographic options.&#x27;)
+ImportError: GeoViews must be installed to enable the geographic options.
+</pre></section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="core_concepts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><svg version="1.1" width="2.0em" height="2.0em" class="sd-octicon sd-octicon-mortar-board sd-mr-1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.292 2.06v-.001l11.25 4.75a.749.749 0 0 1 0 1.382L19 10.108V15a.75.75 0 0 1-.11.391h-.001a2.84 2.84 0 0 1-.392.482c-.249.256-.625.58-1.163.896-1.08.638-2.776 1.23-5.334 1.23-.673 0-1.286-.041-1.846-.113a.75.75 0 0 1 .192-1.487c.492.063 1.042.1 1.654.1 2.317 0 3.746-.533 4.572-1.021.31-.178.596-.397.849-.65l.079-.085V10.74l-5.208 2.2a.75.75 0 0 1-.584 0L5.75 10.424v3.17c.502.129.96.391 1.327.758.579.578.923 1.41.923 2.428v4.5a.761.761 0 0 1-.345.634 2.157 2.157 0 0 1-.21.117 3.923 3.923 0 0 1-.52.213A6.121 6.121 0 0 1 5 22.532a6.092 6.092 0 0 1-1.925-.288 4.065 4.065 0 0 1-.52-.213 1.816 1.816 0 0 1-.22-.124.757.757 0 0 1-.335-.624v-4.5c0-1.02.344-1.85.923-2.43a2.904 2.904 0 0 1 1.327-.757V9.793L.458 8.19a.75.75 0 0 1 0-1.38l11.25-4.75a.75.75 0 0 1 .584 0ZM12 11.436 21.322 7.5 12 3.564 2.678 7.5ZM5 15c-.377 0-.745.141-1.017.413-.265.265-.483.7-.483 1.368v4.022c.299.105.797.228 1.5.228s1.201-.123 1.5-.228V16.78c0-.669-.218-1.103-.483-1.368A1.433 1.433 0 0 0 5 15Z"></path></svg> Core Concepts</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../how_to/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">How to Guides</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declaring-a-pipeline">Declaring a pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#programmatically-building-pipelines">Programmatically building pipelines</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-filters">Automatic filters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chaining-pipelines">Chaining pipelines</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-a-dashboard">Building a dashboard</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/getting_started/pipelines.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020-2024, HoloViz Developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
